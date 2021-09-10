@@ -126,7 +126,7 @@ public class Commands implements CommandExecutor, Listener {
 
 
             } else {
-                System.out.println("cant parse integer");
+                System.out.println("cant parse integer, this is ther error");
             }
         }
         return true;
