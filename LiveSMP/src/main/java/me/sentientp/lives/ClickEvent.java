@@ -59,7 +59,7 @@ public class ClickEvent implements Listener {
                     }
                     if (player.lives <= 0) {
                         for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-                            pl.sendTitle(ChatColor.YELLOW + pl.getName(), ChatColor.RED + "has perished.", 1, 200, 1);
+                            pl.sendTitle(ChatColor.YELLOW + pl.getName(), ChatColor.RED + "sacrificed themselves.", 1, 200, 1);
                             pl.playSound(pl.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 2.0F, 1.0F);
                         }
                         p.setGameMode(GameMode.SPECTATOR);
