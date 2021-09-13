@@ -35,6 +35,16 @@ public class Commands implements CommandExecutor, Listener {
         item.setItemMeta(meta);
         return item;
     }
+
+    public ItemStack getCrackedPlayerHead(Player p) {
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(p.getName()));
+        meta.setDisplayName(p.getName());
+        item.setItemMeta(meta);
+        return item;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -94,40 +104,61 @@ public class Commands implements CommandExecutor, Listener {
             gui.setContents(menuitems);
             p.openInventory(gui);
 
-        }
-        if (cmd.getName().equalsIgnoreCase("donate")) {
-             serverMember person = new serverMember(p);
-             if (person.lives<=0) {
-                 ExampleGui newgui = new ExampleGui(36, "donate!");
-                 for (Player onlinePlayer:Bukkit.getOnlinePlayers()) {
-                     OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(onlinePlayer.getUniqueId());
-                     ItemStack theirskull = getPlayerHead(offlinePlayer);
-                     newgui.initializeitemstack(theirskull);
+        } else if (cmd.getName().equalsIgnoreCase("donate")) {
+            serverMember person = new serverMember(p);
+            if (person.lives>0) {
+                ExampleGui newgui = new ExampleGui(36, "donate!");
+                for (Player onlinePlayer:Bukkit.getOnlinePlayers()) {
+                    try {
+                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(onlinePlayer.getUniqueId());
+                        ItemStack theirskull = getPlayerHead(offlinePlayer);
+                        newgui.initializeitemstack(theirskull);
+                    } catch (Exception e) {
+                        ItemStack theirskull = getCrackedPlayerHead(onlinePlayer);
+                        newgui.initializeitemstack(theirskull);
 
-                 }
-                 newgui.openInventory(p);
+                    }
 
-             }
-
-        }
-        if (cmd.getName().equalsIgnoreCase("getlives")) {
-            if (NumberUtils.isNumber(args[0])) {
-                int livesToAdd = Integer.parseInt(args[0]);
-                Player recieverPlayer = Bukkit.getPlayer(args[1]);
-                serverMember recieveroflife = new serverMember(recieverPlayer);
-                recieveroflife.lives+=livesToAdd;
-                System.out.println(livesToAdd+recieveroflife.Name);
-                try {
-                    recieveroflife.updateServerMember();
-                    p.sendMessage("added "+livesToAdd+" lives to "+p.getName());
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
                 }
+                newgui.openInventory(p);
 
-
-            } else {
-                System.out.println("cant parse integer, this is ther error");
             }
+
+        } else if (cmd.getName().equalsIgnoreCase("getlives")) {
+            if (p.isOp()) {
+                if (NumberUtils.isNumber(args[0])) {
+                    int livesToAdd = Integer.parseInt(args[0]);
+                    Player recieverPlayer = Bukkit.getPlayer(args[1]);
+                    serverMember recieveroflife = new serverMember(recieverPlayer);
+                    recieveroflife.lives += livesToAdd;
+                    System.out.println(livesToAdd + recieveroflife.Name);
+                    try {
+                        recieveroflife.updateServerMember();
+                        p.sendMessage("added " + livesToAdd + " lives to " + p.getName());
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    }
+
+
+                } else {
+                    p.sendMessage("thats not an integer, bruh");
+                    System.out.println("cant parse integer, this is ther error");
+                }
+            }
+        } else if (cmd.getName().equalsIgnoreCase("reset")) {
+            String playerstring = args[0];
+            Player PlayerFromString = Bukkit.getPlayer(playerstring);
+            NamespacedKey killsKey = new NamespacedKey(Lives.getPlugin(), "kills");
+            NamespacedKey deathsKey = new NamespacedKey(Lives.getPlugin(), "deaths");
+            NamespacedKey livesKey = new NamespacedKey(Lives.getPlugin(), "lives");
+            NamespacedKey donationsKey = new NamespacedKey(Lives.getPlugin(), "donations");
+            PersistentDataContainer data = PlayerFromString.getPersistentDataContainer();
+            data.set(killsKey, PersistentDataType.INTEGER, 0);
+            data.set(deathsKey, PersistentDataType.INTEGER, 0);
+            data.set(livesKey, PersistentDataType.INTEGER, 5);
+            data.set(donationsKey, PersistentDataType.INTEGER, 0);
+
+            Bukkit.broadcastMessage(p.getName()+ " Has reset "+PlayerFromString.getName()+"'s life values.");
         }
         return true;
 

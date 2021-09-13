@@ -12,6 +12,10 @@ public final class Lives extends JavaPlugin {
         System.out.println("Hello World!");
         getServer().getPluginManager().registerEvents(new PlayerKill(), this);
         getCommand("stats").setExecutor(new Commands());
+        getCommand("donate").setExecutor(new Commands());
+        getCommand("getlives").setExecutor(new Commands());
+        getCommand("reset").setExecutor(new Commands());
+
         getServer().getPluginManager().registerEvents(new ClickEvent(), this);
     }
 
