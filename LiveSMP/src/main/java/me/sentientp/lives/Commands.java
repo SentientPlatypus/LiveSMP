@@ -109,16 +109,17 @@ public class Commands implements CommandExecutor, Listener {
             if (person.lives>0) {
                 ExampleGui newgui = new ExampleGui(36, "donate!");
                 for (Player onlinePlayer:Bukkit.getOnlinePlayers()) {
-                    try {
-                        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(onlinePlayer.getUniqueId());
-                        ItemStack theirskull = getPlayerHead(offlinePlayer);
-                        newgui.initializeitemstack(theirskull);
-                    } catch (Exception e) {
-                        ItemStack theirskull = getCrackedPlayerHead(onlinePlayer);
-                        newgui.initializeitemstack(theirskull);
+                    if (onlinePlayer.getName()!=p.getName()) {
+                        try {
+                            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(onlinePlayer.getUniqueId());
+                            ItemStack theirskull = getPlayerHead(offlinePlayer);
+                            newgui.initializeitemstack(theirskull);
+                        } catch (Exception e) {
+                            ItemStack theirskull = getCrackedPlayerHead(onlinePlayer);
+                            newgui.initializeitemstack(theirskull);
 
+                        }
                     }
-
                 }
                 newgui.openInventory(p);
 

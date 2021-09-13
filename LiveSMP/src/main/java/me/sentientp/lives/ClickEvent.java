@@ -70,25 +70,26 @@ public class ClickEvent implements Listener {
                     if (person.lives>0) {
                         ExampleGui newgui = new ExampleGui(36, "donate!");
                         for (Player onlinePlayer: Bukkit.getOnlinePlayers()) {
-                            try {
-                                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(onlinePlayer.getUniqueId());
-                                ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-                                SkullMeta metaa = (SkullMeta) item.getItemMeta();
-                                assert metaa != null;
-                                metaa.setOwningPlayer(offlinePlayer);
-                                metaa.setDisplayName(offlinePlayer.getName());
-                                item.setItemMeta(metaa);
-                                ItemStack theirskull = item;
-                                newgui.initializeitemstack(theirskull);
-                            } catch (Exception er) {
-                                ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-                                SkullMeta metaA = (SkullMeta) item.getItemMeta();
-                                metaA.setOwningPlayer(Bukkit.getOfflinePlayer(onlinePlayer.getName()));
-                                metaA.setDisplayName(p.getName());
-                                item.setItemMeta(metaA);
-                                newgui.initializeitemstack(item);
+                            if (onlinePlayer.getName()!=p.getName()) {
+                                try {
+                                    OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(onlinePlayer.getUniqueId());
+                                    ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+                                    SkullMeta metaa = (SkullMeta) item.getItemMeta();
+                                    assert metaa != null;
+                                    metaa.setOwningPlayer(offlinePlayer);
+                                    metaa.setDisplayName(offlinePlayer.getName());
+                                    item.setItemMeta(metaa);
+                                    ItemStack theirskull = item;
+                                    newgui.initializeitemstack(theirskull);
+                                } catch (Exception er) {
+                                    ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+                                    SkullMeta metaA = (SkullMeta) item.getItemMeta();
+                                    metaA.setOwningPlayer(Bukkit.getOfflinePlayer(onlinePlayer.getName()));
+                                    metaA.setDisplayName(p.getName());
+                                    item.setItemMeta(metaA);
+                                    newgui.initializeitemstack(item);
+                                }
                             }
-
                         }
                         newgui.openInventory(p);
 
