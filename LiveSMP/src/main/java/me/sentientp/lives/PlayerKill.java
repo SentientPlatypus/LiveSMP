@@ -83,24 +83,6 @@ public class PlayerKill implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
-        serverMember member = new serverMember(p);
-        if (p.hasPlayedBefore()) {
-            Bukkit.broadcastMessage(ChatColor.GREEN+"Greetings, "+p.getName());
-            if (member.lives>0 && p.getGameMode()==GameMode.SPECTATOR) {
-                p.setGameMode(GameMode.SURVIVAL);
-                if (p.getBedSpawnLocation()!=null) {
-                    p.teleport(p.getBedSpawnLocation());
-                } else {
-                    p.teleport(p.getWorld().getSpawnLocation());
-                    p.sendMessage(ChatColor.RED + "You didnt have a bed, so you were sent to spawn");
-                }
-                for (Player player:Bukkit.getServer().getOnlinePlayers()) {
-                    player.sendTitle(ChatColor.YELLOW+p.getName(), ChatColor.GREEN+"has been revived.", 1, 200, 1);
-                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2.0F, 1.0F);
-                }
-            }
-
-        }
         NamespacedKey killsKey = new NamespacedKey(Lives.getPlugin(), "kills");
         NamespacedKey deathsKey = new NamespacedKey(Lives.getPlugin(), "deaths");
         NamespacedKey livesKey = new NamespacedKey(Lives.getPlugin(), "lives");
@@ -118,6 +100,24 @@ public class PlayerKill implements Listener {
         }
         if (!data.has(donationsKey, PersistentDataType.INTEGER)) {
             data.set(donationsKey, PersistentDataType.INTEGER, 0);
+        }
+        if (p.hasPlayedBefore()) {
+            serverMember member = new serverMember(p);
+            Bukkit.broadcastMessage(ChatColor.GREEN+"Greetings, "+p.getName());
+            if (member.lives>0 && p.getGameMode()==GameMode.SPECTATOR) {
+                p.setGameMode(GameMode.SURVIVAL);
+                if (p.getBedSpawnLocation()!=null) {
+                    p.teleport(p.getBedSpawnLocation());
+                } else {
+                    p.teleport(p.getWorld().getSpawnLocation());
+                    p.sendMessage(ChatColor.RED + "You didnt have a bed, so you were sent to spawn");
+                }
+                for (Player player:Bukkit.getServer().getOnlinePlayers()) {
+                    player.sendTitle(ChatColor.YELLOW+p.getName(), ChatColor.GREEN+"has been revived.", 1, 200, 1);
+                    player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2.0F, 1.0F);
+                }
+            }
+
         }
 
 

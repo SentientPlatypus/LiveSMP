@@ -1,5 +1,7 @@
 package me.sentientp.lives;
 
+import me.sentientp.lives.Commands;
+import me.sentientp.lives.PlayerKill;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Lives extends JavaPlugin {

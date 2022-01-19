@@ -16,7 +16,7 @@ public class serverMember {
     int kills;
     int lives;
     int donations;
-    serverMember(Player p) {
+    public serverMember(Player p) {
         NamespacedKey killsKey = new NamespacedKey(Lives.getPlugin(), "kills");
         NamespacedKey deathsKey = new NamespacedKey(Lives.getPlugin(), "deaths");
         NamespacedKey livesKey = new NamespacedKey(Lives.getPlugin(), "lives");
